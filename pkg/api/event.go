@@ -22,8 +22,10 @@ type Event struct {
 	ReconciledDate *time.Time `json:"gorm:null"`
 }
 
-type EventList []*Event
-type EventIndex map[string]*Event
+type (
+	EventList  []*Event
+	EventIndex map[string]*Event
+)
 
 func (l EventList) Index() EventIndex {
 	index := EventIndex{}

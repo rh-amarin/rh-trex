@@ -23,7 +23,6 @@ import (
 
 	"github.com/openshift-online/rh-trex/cmd/trex/environments"
 	"github.com/openshift-online/rh-trex/cmd/trex/server"
-	"github.com/openshift-online/rh-trex/pkg/api"
 	"github.com/openshift-online/rh-trex/pkg/api/openapi"
 	"github.com/openshift-online/rh-trex/pkg/config"
 	"github.com/openshift-online/rh-trex/pkg/db"
@@ -239,6 +238,7 @@ func (helper *Helper) HealthCheckURL(path string) string {
 
 func (helper *Helper) NewApiClient() *openapi.APIClient {
 	config := openapi.NewConfiguration()
+	config.Debug = true
 	client := openapi.NewAPIClient(config)
 	return client
 }
@@ -324,7 +324,6 @@ func (helper *Helper) MigrateDBTo(migrationID string) {
 }
 
 func (helper *Helper) ClearAllTables() {
-	helper.DeleteAll(&api.Dinosaur{})
 }
 
 func (helper *Helper) CleanDB() error {

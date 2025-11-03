@@ -11,7 +11,7 @@ import (
 	"github.com/openshift-online/rh-trex/cmd/trex/servecmd"
 
 	// Import plugins to trigger their init() functions
-	_ "github.com/openshift-online/rh-trex/plugins/dinosaurs"
+	_ "github.com/openshift-online/rh-trex/plugins/clusters"
 	_ "github.com/openshift-online/rh-trex/plugins/events"
 	_ "github.com/openshift-online/rh-trex/plugins/generic"
 )
@@ -26,7 +26,7 @@ func main() {
 	// parsed.
 	_ = flag.CommandLine.Parse([]string{})
 
-	//pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
+	// pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 
 	// Always log to stderr by default
 	if err := flag.Set("logtostderr", "true"); err != nil {

@@ -4,18 +4,30 @@ All URIs are relative to *http://localhost:8000*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**ApiRhTrexV1DinosaursGet**](DefaultAPI.md#ApiRhTrexV1DinosaursGet) | **Get** /api/rh-trex/v1/dinosaurs | Returns a list of dinosaurs
-[**ApiRhTrexV1DinosaursIdGet**](DefaultAPI.md#ApiRhTrexV1DinosaursIdGet) | **Get** /api/rh-trex/v1/dinosaurs/{id} | Get an dinosaur by id
-[**ApiRhTrexV1DinosaursIdPatch**](DefaultAPI.md#ApiRhTrexV1DinosaursIdPatch) | **Patch** /api/rh-trex/v1/dinosaurs/{id} | Update an dinosaur
-[**ApiRhTrexV1DinosaursPost**](DefaultAPI.md#ApiRhTrexV1DinosaursPost) | **Post** /api/rh-trex/v1/dinosaurs | Create a new dinosaur
+[**CreateNodePool**](DefaultAPI.md#CreateNodePool) | **Post** /api/hyperfleet/v1/clusters/{cluster_id}/nodepools | Create nodepool
+[**GetClusterById**](DefaultAPI.md#GetClusterById) | **Get** /api/hyperfleet/v1/clusters/{cluster_id} | Get cluster by ID
+[**GetClusterStatusById**](DefaultAPI.md#GetClusterStatusById) | **Get** /api/hyperfleet/v1/clusters/{cluster_id}/statuses/{status_id} | Get adapter status by ID
+[**GetClusterStatuses**](DefaultAPI.md#GetClusterStatuses) | **Get** /api/hyperfleet/v1/clusters/{cluster_id}/statuses | List all adapter statuses for cluster
+[**GetClusters**](DefaultAPI.md#GetClusters) | **Get** /api/hyperfleet/v1/clusters | List clusters
+[**GetCompatibility**](DefaultAPI.md#GetCompatibility) | **Get** /api/hyperfleet/v1/compatibility | 
+[**GetNodePoolById**](DefaultAPI.md#GetNodePoolById) | **Get** /api/hyperfleet/v1/nodepools/{nodepool_id} | Get nodepool by ID
+[**GetNodePoolStatusById**](DefaultAPI.md#GetNodePoolStatusById) | **Get** /api/hyperfleet/v1/clusters/{cluster_id}/nodepools/{nodepool_id}/statuses/{status_id} | Get adapter status by ID
+[**GetNodePools**](DefaultAPI.md#GetNodePools) | **Get** /api/hyperfleet/v1/nodepools | List all nodepools for cluster
+[**GetNodePoolsByClusterId**](DefaultAPI.md#GetNodePoolsByClusterId) | **Get** /api/hyperfleet/v1/clusters/{cluster_id}/nodepools | List all nodepools for cluster
+[**GetNodePoolsStatuses**](DefaultAPI.md#GetNodePoolsStatuses) | **Get** /api/hyperfleet/v1/clusters/{cluster_id}/nodepools/{nodepool_id}/statuses | List all adapter statuses for nodepools
+[**PostCluster**](DefaultAPI.md#PostCluster) | **Post** /api/hyperfleet/v1/clusters | Create cluster
+[**PostClusterStatuses**](DefaultAPI.md#PostClusterStatuses) | **Post** /api/hyperfleet/v1/clusters/{cluster_id}/statuses | Create adapter status
+[**PostNodePoolStatuses**](DefaultAPI.md#PostNodePoolStatuses) | **Post** /api/hyperfleet/v1/clusters/{cluster_id}/nodepools/{nodepool_id}/statuses | Create adapter status
 
 
 
-## ApiRhTrexV1DinosaursGet
+## CreateNodePool
 
-> DinosaurList ApiRhTrexV1DinosaursGet(ctx).Page(page).Size(size).Search(search).OrderBy(orderBy).Fields(fields).Execute()
+> NodePoolCreateResponse CreateNodePool(ctx, clusterId).NodePoolCreateRequest(nodePoolCreateRequest).Execute()
 
-Returns a list of dinosaurs
+Create nodepool
+
+
 
 ### Example
 
@@ -26,93 +38,23 @@ import (
 	"context"
 	"fmt"
 	"os"
+    "time"
 	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func main() {
-	page := int32(56) // int32 | Page number of record list when record list exceeds specified page size (optional) (default to 1)
-	size := int32(56) // int32 | Maximum number of records to return (optional) (default to 100)
-	search := "search_example" // string | Specifies the search criteria. The syntax of this parameter is similar to the syntax of the _where_ clause of an SQL statement, using the names of the json attributes / column names of the account.  For example, in order to retrieve all the accounts with a username starting with `my`:  ```sql username like 'my%' ```  The search criteria can also be applied on related resource. For example, in order to retrieve all the subscriptions labeled by `foo=bar`,  ```sql subscription_labels.key = 'foo' and subscription_labels.value = 'bar' ```  If the parameter isn't provided, or if the value is empty, then all the accounts that the user has permission to see will be returned. (optional)
-	orderBy := "orderBy_example" // string | Specifies the order by criteria. The syntax of this parameter is similar to the syntax of the _order by_ clause of an SQL statement, but using the names of the json attributes / column of the account. For example, in order to retrieve all accounts ordered by username:  ```sql username asc ```  Or in order to retrieve all accounts ordered by username _and_ first name:  ```sql username asc, firstName asc ```  If the parameter isn't provided, or if the value is empty, then no explicit ordering will be applied. (optional)
-	fields := "fields_example" // string | Supplies a comma-separated list of fields to be returned. Fields of sub-structures and of arrays use <structure>.<field> notation. <stucture>.* means all field of a structure Example: For each Subscription to get id, href, plan(id and kind) and labels (all fields)  ``` ocm get subscriptions --parameter fields=id,href,plan.id,plan.kind,labels.* --parameter fetchLabels=true ``` (optional)
+	clusterId := "clusterId_example" // string | Cluster ID
+	nodePoolCreateRequest := *openapiclient.NewNodePoolCreateRequest(map[string]string{"key": "Inner_example"}, time.Now(), time.Now(), "Name_example", map[string]interface{}{"key": interface{}(123)}) // NodePoolCreateRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.DefaultAPI.ApiRhTrexV1DinosaursGet(context.Background()).Page(page).Size(size).Search(search).OrderBy(orderBy).Fields(fields).Execute()
+	resp, r, err := apiClient.DefaultAPI.CreateNodePool(context.Background(), clusterId).NodePoolCreateRequest(nodePoolCreateRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.ApiRhTrexV1DinosaursGet``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.CreateNodePool``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `ApiRhTrexV1DinosaursGet`: DinosaurList
-	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.ApiRhTrexV1DinosaursGet`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiApiRhTrexV1DinosaursGetRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **page** | **int32** | Page number of record list when record list exceeds specified page size | [default to 1]
- **size** | **int32** | Maximum number of records to return | [default to 100]
- **search** | **string** | Specifies the search criteria. The syntax of this parameter is similar to the syntax of the _where_ clause of an SQL statement, using the names of the json attributes / column names of the account.  For example, in order to retrieve all the accounts with a username starting with &#x60;my&#x60;:  &#x60;&#x60;&#x60;sql username like &#39;my%&#39; &#x60;&#x60;&#x60;  The search criteria can also be applied on related resource. For example, in order to retrieve all the subscriptions labeled by &#x60;foo&#x3D;bar&#x60;,  &#x60;&#x60;&#x60;sql subscription_labels.key &#x3D; &#39;foo&#39; and subscription_labels.value &#x3D; &#39;bar&#39; &#x60;&#x60;&#x60;  If the parameter isn&#39;t provided, or if the value is empty, then all the accounts that the user has permission to see will be returned. | 
- **orderBy** | **string** | Specifies the order by criteria. The syntax of this parameter is similar to the syntax of the _order by_ clause of an SQL statement, but using the names of the json attributes / column of the account. For example, in order to retrieve all accounts ordered by username:  &#x60;&#x60;&#x60;sql username asc &#x60;&#x60;&#x60;  Or in order to retrieve all accounts ordered by username _and_ first name:  &#x60;&#x60;&#x60;sql username asc, firstName asc &#x60;&#x60;&#x60;  If the parameter isn&#39;t provided, or if the value is empty, then no explicit ordering will be applied. | 
- **fields** | **string** | Supplies a comma-separated list of fields to be returned. Fields of sub-structures and of arrays use &lt;structure&gt;.&lt;field&gt; notation. &lt;stucture&gt;.* means all field of a structure Example: For each Subscription to get id, href, plan(id and kind) and labels (all fields)  &#x60;&#x60;&#x60; ocm get subscriptions --parameter fields&#x3D;id,href,plan.id,plan.kind,labels.* --parameter fetchLabels&#x3D;true &#x60;&#x60;&#x60; | 
-
-### Return type
-
-[**DinosaurList**](DinosaurList.md)
-
-### Authorization
-
-[Bearer](../README.md#Bearer)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## ApiRhTrexV1DinosaursIdGet
-
-> Dinosaur ApiRhTrexV1DinosaursIdGet(ctx, id).Execute()
-
-Get an dinosaur by id
-
-### Example
-
-```go
-package main
-
-import (
-	"context"
-	"fmt"
-	"os"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
-)
-
-func main() {
-	id := "id_example" // string | The id of record
-
-	configuration := openapiclient.NewConfiguration()
-	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.DefaultAPI.ApiRhTrexV1DinosaursIdGet(context.Background(), id).Execute()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.ApiRhTrexV1DinosaursIdGet``: %v\n", err)
-		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-	}
-	// response from `ApiRhTrexV1DinosaursIdGet`: Dinosaur
-	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.ApiRhTrexV1DinosaursIdGet`: %v\n", resp)
+	// response from `CreateNodePool`: NodePoolCreateResponse
+	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.CreateNodePool`: %v\n", resp)
 }
 ```
 
@@ -122,94 +64,25 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | The id of record | 
+**clusterId** | **string** | Cluster ID | 
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiApiRhTrexV1DinosaursIdGetRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiCreateNodePoolRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **nodePoolCreateRequest** | [**NodePoolCreateRequest**](NodePoolCreateRequest.md) |  | 
 
 ### Return type
 
-[**Dinosaur**](Dinosaur.md)
+[**NodePoolCreateResponse**](NodePoolCreateResponse.md)
 
 ### Authorization
 
-[Bearer](../README.md#Bearer)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## ApiRhTrexV1DinosaursIdPatch
-
-> Dinosaur ApiRhTrexV1DinosaursIdPatch(ctx, id).DinosaurPatchRequest(dinosaurPatchRequest).Execute()
-
-Update an dinosaur
-
-### Example
-
-```go
-package main
-
-import (
-	"context"
-	"fmt"
-	"os"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
-)
-
-func main() {
-	id := "id_example" // string | The id of record
-	dinosaurPatchRequest := *openapiclient.NewDinosaurPatchRequest() // DinosaurPatchRequest | Updated dinosaur data
-
-	configuration := openapiclient.NewConfiguration()
-	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.DefaultAPI.ApiRhTrexV1DinosaursIdPatch(context.Background(), id).DinosaurPatchRequest(dinosaurPatchRequest).Execute()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.ApiRhTrexV1DinosaursIdPatch``: %v\n", err)
-		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-	}
-	// response from `ApiRhTrexV1DinosaursIdPatch`: Dinosaur
-	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.ApiRhTrexV1DinosaursIdPatch`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | The id of record | 
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiApiRhTrexV1DinosaursIdPatchRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-
- **dinosaurPatchRequest** | [**DinosaurPatchRequest**](DinosaurPatchRequest.md) | Updated dinosaur data | 
-
-### Return type
-
-[**Dinosaur**](Dinosaur.md)
-
-### Authorization
-
-[Bearer](../README.md#Bearer)
+No authorization required
 
 ### HTTP request headers
 
@@ -221,11 +94,11 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## ApiRhTrexV1DinosaursPost
+## GetClusterById
 
-> Dinosaur ApiRhTrexV1DinosaursPost(ctx).Dinosaur(dinosaur).Execute()
+> GetClusterById200Response GetClusterById(ctx, clusterId).Execute()
 
-Create a new dinosaur
+Get cluster by ID
 
 ### Example
 
@@ -240,17 +113,242 @@ import (
 )
 
 func main() {
-	dinosaur := *openapiclient.NewDinosaur("Species_example") // Dinosaur | Dinosaur data
+	clusterId := "clusterId_example" // string | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.DefaultAPI.ApiRhTrexV1DinosaursPost(context.Background()).Dinosaur(dinosaur).Execute()
+	resp, r, err := apiClient.DefaultAPI.GetClusterById(context.Background(), clusterId).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.ApiRhTrexV1DinosaursPost``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.GetClusterById``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `ApiRhTrexV1DinosaursPost`: Dinosaur
-	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.ApiRhTrexV1DinosaursPost`: %v\n", resp)
+	// response from `GetClusterById`: GetClusterById200Response
+	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.GetClusterById`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**clusterId** | **string** |  | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetClusterByIdRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+[**GetClusterById200Response**](GetClusterById200Response.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetClusterStatusById
+
+> AdapterStatus GetClusterStatusById(ctx, clusterId, statusId).Execute()
+
+Get adapter status by ID
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	clusterId := "clusterId_example" // string | Cluster ID
+	statusId := "statusId_example" // string | Status ID
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.DefaultAPI.GetClusterStatusById(context.Background(), clusterId, statusId).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.GetClusterStatusById``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `GetClusterStatusById`: AdapterStatus
+	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.GetClusterStatusById`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**clusterId** | **string** | Cluster ID | 
+**statusId** | **string** | Status ID | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetClusterStatusByIdRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+
+### Return type
+
+[**AdapterStatus**](AdapterStatus.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetClusterStatuses
+
+> GetNodePoolsStatuses200Response GetClusterStatuses(ctx, clusterId).Search(search).Page(page).PageSize(pageSize).OrderBy(orderBy).Order(order).Execute()
+
+List all adapter statuses for cluster
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	clusterId := "clusterId_example" // string | Cluster ID
+	search := "search_example" // string |  (optional)
+	page := int32(56) // int32 |  (optional) (default to 1)
+	pageSize := int32(56) // int32 |  (optional) (default to 20)
+	orderBy := "orderBy_example" // string |  (optional) (default to "created_at")
+	order := openapiclient.OrderDirection("asc") // OrderDirection |  (optional)
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.DefaultAPI.GetClusterStatuses(context.Background(), clusterId).Search(search).Page(page).PageSize(pageSize).OrderBy(orderBy).Order(order).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.GetClusterStatuses``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `GetClusterStatuses`: GetNodePoolsStatuses200Response
+	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.GetClusterStatuses`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**clusterId** | **string** | Cluster ID | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetClusterStatusesRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **search** | **string** |  | 
+ **page** | **int32** |  | [default to 1]
+ **pageSize** | **int32** |  | [default to 20]
+ **orderBy** | **string** |  | [default to &quot;created_at&quot;]
+ **order** | [**OrderDirection**](OrderDirection.md) |  | 
+
+### Return type
+
+[**GetNodePoolsStatuses200Response**](GetNodePoolsStatuses200Response.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetClusters
+
+> ClusterList GetClusters(ctx).Search(search).Page(page).PageSize(pageSize).OrderBy(orderBy).Order(order).Execute()
+
+List clusters
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	search := "search_example" // string |  (optional)
+	page := int32(56) // int32 |  (optional) (default to 1)
+	pageSize := int32(56) // int32 |  (optional) (default to 20)
+	orderBy := "orderBy_example" // string |  (optional) (default to "created_at")
+	order := openapiclient.OrderDirection("asc") // OrderDirection |  (optional)
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.DefaultAPI.GetClusters(context.Background()).Search(search).Page(page).PageSize(pageSize).OrderBy(orderBy).Order(order).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.GetClusters``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `GetClusters`: ClusterList
+	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.GetClusters`: %v\n", resp)
 }
 ```
 
@@ -260,20 +358,697 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiApiRhTrexV1DinosaursPostRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetClustersRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **dinosaur** | [**Dinosaur**](Dinosaur.md) | Dinosaur data | 
+ **search** | **string** |  | 
+ **page** | **int32** |  | [default to 1]
+ **pageSize** | **int32** |  | [default to 20]
+ **orderBy** | **string** |  | [default to &quot;created_at&quot;]
+ **order** | [**OrderDirection**](OrderDirection.md) |  | 
 
 ### Return type
 
-[**Dinosaur**](Dinosaur.md)
+[**ClusterList**](ClusterList.md)
 
 ### Authorization
 
-[Bearer](../README.md#Bearer)
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetCompatibility
+
+> string GetCompatibility(ctx).Search(search).Page(page).PageSize(pageSize).OrderBy(orderBy).Order(order).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	search := "search_example" // string |  (optional)
+	page := int32(56) // int32 |  (optional) (default to 1)
+	pageSize := int32(56) // int32 |  (optional) (default to 20)
+	orderBy := "orderBy_example" // string |  (optional) (default to "created_at")
+	order := openapiclient.OrderDirection("asc") // OrderDirection |  (optional)
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.DefaultAPI.GetCompatibility(context.Background()).Search(search).Page(page).PageSize(pageSize).OrderBy(orderBy).Order(order).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.GetCompatibility``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `GetCompatibility`: string
+	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.GetCompatibility`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetCompatibilityRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **search** | **string** |  | 
+ **page** | **int32** |  | [default to 1]
+ **pageSize** | **int32** |  | [default to 20]
+ **orderBy** | **string** |  | [default to &quot;created_at&quot;]
+ **order** | [**OrderDirection**](OrderDirection.md) |  | 
+
+### Return type
+
+**string**
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: text/plain
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetNodePoolById
+
+> NodePool GetNodePoolById(ctx, nodepoolId).Execute()
+
+Get nodepool by ID
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	nodepoolId := "nodepoolId_example" // string | NodePool ID
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.DefaultAPI.GetNodePoolById(context.Background(), nodepoolId).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.GetNodePoolById``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `GetNodePoolById`: NodePool
+	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.GetNodePoolById`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**nodepoolId** | **string** | NodePool ID | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetNodePoolByIdRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+[**NodePool**](NodePool.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetNodePoolStatusById
+
+> AdapterStatus GetNodePoolStatusById(ctx, clusterId, nodepoolId, statusId).Execute()
+
+Get adapter status by ID
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	clusterId := "clusterId_example" // string | Cluster ID
+	nodepoolId := "nodepoolId_example" // string | 
+	statusId := "statusId_example" // string | Status ID
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.DefaultAPI.GetNodePoolStatusById(context.Background(), clusterId, nodepoolId, statusId).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.GetNodePoolStatusById``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `GetNodePoolStatusById`: AdapterStatus
+	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.GetNodePoolStatusById`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**clusterId** | **string** | Cluster ID | 
+**nodepoolId** | **string** |  | 
+**statusId** | **string** | Status ID | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetNodePoolStatusByIdRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+
+
+### Return type
+
+[**AdapterStatus**](AdapterStatus.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetNodePools
+
+> GetNodePoolsByClusterId200Response GetNodePools(ctx).Search(search).Page(page).PageSize(pageSize).OrderBy(orderBy).Order(order).Execute()
+
+List all nodepools for cluster
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	search := "search_example" // string |  (optional)
+	page := int32(56) // int32 |  (optional) (default to 1)
+	pageSize := int32(56) // int32 |  (optional) (default to 20)
+	orderBy := "orderBy_example" // string |  (optional) (default to "created_at")
+	order := openapiclient.OrderDirection("asc") // OrderDirection |  (optional)
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.DefaultAPI.GetNodePools(context.Background()).Search(search).Page(page).PageSize(pageSize).OrderBy(orderBy).Order(order).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.GetNodePools``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `GetNodePools`: GetNodePoolsByClusterId200Response
+	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.GetNodePools`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetNodePoolsRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **search** | **string** |  | 
+ **page** | **int32** |  | [default to 1]
+ **pageSize** | **int32** |  | [default to 20]
+ **orderBy** | **string** |  | [default to &quot;created_at&quot;]
+ **order** | [**OrderDirection**](OrderDirection.md) |  | 
+
+### Return type
+
+[**GetNodePoolsByClusterId200Response**](GetNodePoolsByClusterId200Response.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetNodePoolsByClusterId
+
+> GetNodePoolsByClusterId200Response GetNodePoolsByClusterId(ctx, clusterId).Search(search).Page(page).PageSize(pageSize).OrderBy(orderBy).Order(order).Execute()
+
+List all nodepools for cluster
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	clusterId := "clusterId_example" // string | Cluster ID
+	search := "search_example" // string |  (optional)
+	page := int32(56) // int32 |  (optional) (default to 1)
+	pageSize := int32(56) // int32 |  (optional) (default to 20)
+	orderBy := "orderBy_example" // string |  (optional) (default to "created_at")
+	order := openapiclient.OrderDirection("asc") // OrderDirection |  (optional)
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.DefaultAPI.GetNodePoolsByClusterId(context.Background(), clusterId).Search(search).Page(page).PageSize(pageSize).OrderBy(orderBy).Order(order).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.GetNodePoolsByClusterId``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `GetNodePoolsByClusterId`: GetNodePoolsByClusterId200Response
+	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.GetNodePoolsByClusterId`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**clusterId** | **string** | Cluster ID | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetNodePoolsByClusterIdRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **search** | **string** |  | 
+ **page** | **int32** |  | [default to 1]
+ **pageSize** | **int32** |  | [default to 20]
+ **orderBy** | **string** |  | [default to &quot;created_at&quot;]
+ **order** | [**OrderDirection**](OrderDirection.md) |  | 
+
+### Return type
+
+[**GetNodePoolsByClusterId200Response**](GetNodePoolsByClusterId200Response.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetNodePoolsStatuses
+
+> GetNodePoolsStatuses200Response GetNodePoolsStatuses(ctx, clusterId, nodepoolId).Search(search).Page(page).PageSize(pageSize).OrderBy(orderBy).Order(order).Execute()
+
+List all adapter statuses for nodepools
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	clusterId := "clusterId_example" // string | Cluster ID
+	nodepoolId := "nodepoolId_example" // string | 
+	search := "search_example" // string |  (optional)
+	page := int32(56) // int32 |  (optional) (default to 1)
+	pageSize := int32(56) // int32 |  (optional) (default to 20)
+	orderBy := "orderBy_example" // string |  (optional) (default to "created_at")
+	order := openapiclient.OrderDirection("asc") // OrderDirection |  (optional)
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.DefaultAPI.GetNodePoolsStatuses(context.Background(), clusterId, nodepoolId).Search(search).Page(page).PageSize(pageSize).OrderBy(orderBy).Order(order).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.GetNodePoolsStatuses``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `GetNodePoolsStatuses`: GetNodePoolsStatuses200Response
+	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.GetNodePoolsStatuses`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**clusterId** | **string** | Cluster ID | 
+**nodepoolId** | **string** |  | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetNodePoolsStatusesRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+ **search** | **string** |  | 
+ **page** | **int32** |  | [default to 1]
+ **pageSize** | **int32** |  | [default to 20]
+ **orderBy** | **string** |  | [default to &quot;created_at&quot;]
+ **order** | [**OrderDirection**](OrderDirection.md) |  | 
+
+### Return type
+
+[**GetNodePoolsStatuses200Response**](GetNodePoolsStatuses200Response.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## PostCluster
+
+> Error PostCluster(ctx).ClusterCreateRequest(clusterCreateRequest).Execute()
+
+Create cluster
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+    "time"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	clusterCreateRequest := *openapiclient.NewClusterCreateRequest("Kind_example", "Name_example", map[string]interface{}{"key": interface{}(123)}, map[string]string{"key": "Inner_example"}, time.Now(), time.Now()) // ClusterCreateRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.DefaultAPI.PostCluster(context.Background()).ClusterCreateRequest(clusterCreateRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.PostCluster``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `PostCluster`: Error
+	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.PostCluster`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiPostClusterRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **clusterCreateRequest** | [**ClusterCreateRequest**](ClusterCreateRequest.md) |  | 
+
+### Return type
+
+[**Error**](Error.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## PostClusterStatuses
+
+> AdapterStatus PostClusterStatuses(ctx, clusterId).AdapterStatusCreateRequest(adapterStatusCreateRequest).Execute()
+
+Create adapter status
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+    "time"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	clusterId := "clusterId_example" // string | Cluster ID
+	adapterStatusCreateRequest := *openapiclient.NewAdapterStatusCreateRequest("AdapterName_example", int32(123), []openapiclient.Condition{*openapiclient.NewCondition("Type_example", "Status_example", int32(123), time.Now(), time.Now())}) // AdapterStatusCreateRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.DefaultAPI.PostClusterStatuses(context.Background(), clusterId).AdapterStatusCreateRequest(adapterStatusCreateRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.PostClusterStatuses``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `PostClusterStatuses`: AdapterStatus
+	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.PostClusterStatuses`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**clusterId** | **string** | Cluster ID | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiPostClusterStatusesRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **adapterStatusCreateRequest** | [**AdapterStatusCreateRequest**](AdapterStatusCreateRequest.md) |  | 
+
+### Return type
+
+[**AdapterStatus**](AdapterStatus.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## PostNodePoolStatuses
+
+> AdapterStatus PostNodePoolStatuses(ctx, clusterId, nodepoolId).AdapterStatusCreateRequest(adapterStatusCreateRequest).Execute()
+
+Create adapter status
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+    "time"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	clusterId := "clusterId_example" // string | Cluster ID
+	nodepoolId := "nodepoolId_example" // string | 
+	adapterStatusCreateRequest := *openapiclient.NewAdapterStatusCreateRequest("AdapterName_example", int32(123), []openapiclient.Condition{*openapiclient.NewCondition("Type_example", "Status_example", int32(123), time.Now(), time.Now())}) // AdapterStatusCreateRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.DefaultAPI.PostNodePoolStatuses(context.Background(), clusterId, nodepoolId).AdapterStatusCreateRequest(adapterStatusCreateRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.PostNodePoolStatuses``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `PostNodePoolStatuses`: AdapterStatus
+	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.PostNodePoolStatuses`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**clusterId** | **string** | Cluster ID | 
+**nodepoolId** | **string** |  | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiPostNodePoolStatusesRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+ **adapterStatusCreateRequest** | [**AdapterStatusCreateRequest**](AdapterStatusCreateRequest.md) |  | 
+
+### Return type
+
+[**AdapterStatus**](AdapterStatus.md)
+
+### Authorization
+
+No authorization required
 
 ### HTTP request headers
 

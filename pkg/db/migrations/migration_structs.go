@@ -26,8 +26,10 @@ import (
 //
 // 4. Create one function in a separate file that returns your Migration. Add that single function call to this list.
 var MigrationList = []*gormigrate.Migration{
-	addDinosaurs(),
 	addEvents(),
+	addClusters(),
+	addConditionAvailable(),
+	addClusterStatuses(),
 }
 
 // Model represents the base model struct. All entities will have this struct embedded.
@@ -46,8 +48,8 @@ type fkMigration struct {
 }
 
 func CreateFK(g2 *gorm.DB, fks ...fkMigration) error {
-	var query = `ALTER TABLE %s ADD CONSTRAINT %s FOREIGN KEY (%s) REFERENCES %s ON DELETE RESTRICT ON UPDATE RESTRICT;`
-	var drop = `ALTER TABLE %s DROP CONSTRAINT IF EXISTS %s;`
+	query := `ALTER TABLE %s ADD CONSTRAINT %s FOREIGN KEY (%s) REFERENCES %s ON DELETE RESTRICT ON UPDATE RESTRICT;`
+	drop := `ALTER TABLE %s DROP CONSTRAINT IF EXISTS %s;`
 
 	for _, fk := range fks {
 		name := fmt.Sprintf("fk_%s_%s", fk.Model, fk.Dest)
